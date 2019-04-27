@@ -19,8 +19,11 @@ CC = gcc
 MAKE = make
 
 # Build the library by archiving object files
-$(LIB): $(OBJS)
-	ar cr $(LIB) $(OBJS)
+$(LIB):
+	cp libcs50-given.a $(LIB)	
+
+#$(LIB): $(OBJS)
+#	ar cr $(LIB) $(OBJS)
 
 # Dependencies: object files depend on header files
 bag.o: bag.h
