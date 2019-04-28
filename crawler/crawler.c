@@ -19,11 +19,7 @@
 
 // Declarations
 bool str2int(int *number, const char string[]);
-bool pagefetcher(webpage_t *page);
-bool pagesaver(webpage_t *page, const char *dir, int *id, int *pos);
-void testprint(FILE *fp, void *item);
-void testprint2(FILE *fp, const char *key, void *item);
-
+char * strdup(char *string);
 
 int 
 main(const int argc, const char * args[])
@@ -32,22 +28,18 @@ main(const int argc, const char * args[])
   char *seed;
   const char *dir;
   int depth;
+  
   int id = 1;
-  int pos = 0;
-
-  webpage_t *page;
-  bag_t *toCrawl;
-  hashtable_t *hash;
 
   /******************* Checking for Validity ***************************/
   if (argc < 4){
     fprintf(stderr, "Not enough arguments given.\n");
-    fprintf(stderr, USAGE);
+    fprintf(stderr, "%s\n", USAGE);
     return 1;
   }
   else if (argc > 4){
     fprintf(stderr, "Too many arguments given.\n");
-    fprintf(stderr, USAGE);
+    fprintf(stderr, "%s\n", USAGE);
     return 1;
   }
   else{
@@ -57,29 +49,72 @@ main(const int argc, const char * args[])
     }
     else if(depth < 0 || depth > 10){
       fprintf(stderr, "Depth must be between [0,10]\n");
+      return 2;
     }
     
 
     /************* Setting the stage ************/
+
+    // Checks if its a valid URL
     seed = (char*)args[1];
+    if (!IsInternalURL(seed)){
+      fprintf(stderr, "Not an internal URL\n");
+      return 3;
+    }
+    
+    // to prevent it from giving an invalid free due to the seed
+    seed = strdup(seed);
 
     // Checking if its a valid directory
     dir = args[2];
     if (!validDir(dir)){
       fprintf(stderr,"Not a usable directory\n");
+      return 4;
     }
     
-    page = webpage_new(seed, 0, NULL);
-    toCrawl = bag_new();
-    hash = hashtable_new(SLOTS);
+    // Creates the data structures
+    char *extractedURL;
+    webpage_t *page = webpage_new(seed, 0, NULL);
+    bag_t *toCrawl = bag_new();
+    hashtable_t *hash = hashtable_new(SLOTS);
 
     bag_insert(toCrawl, page);
-    // hashtable_insert(hash, webpage_getURL(page), "insertion");
-
+    hashtable_insert(hash, args[1], "");
+    
+    // The big boi loop that does the work
     while((page = bag_extract(toCrawl)) != NULL){
+      int pos = 0;
+      printf("\tTook:\t%s\n", webpage_getURL(page));
+      // fetches the html
       if(pagefetcher(page)){
-        if (pagesaver(page, dir, &id, &pos)){
-          printf("success\n");
+
+        // saves the page if it successfully retrieved html
+        if (pagesaver(page, dir, &id)){
+          printf("\tSaved:\t%s\n", webpage_getURL(page));
+
+          // if it isnt balls deep itll go deeper
+          if (webpage_getDepth(page) < depth){
+
+            // begins the extraction of URL's and adding them to the hashtable and bags
+            while((extractedURL = pagescanner(page, &pos)) != NULL){
+              printf("\tFound:\t%s\n", extractedURL);
+
+              if(NormalizeURL(extractedURL)){
+                if (IsInternalURL(extractedURL)){ // normalizes the url and proceeds only if its internal
+                  if (hashtable_insert(hash, extractedURL, "")){
+                    webpage_t *new =  webpage_new(extractedURL, webpage_getDepth(page) + 1, NULL);
+                    bag_insert(toCrawl, new);
+                    printf("\tAdded:\t%s\n", extractedURL);
+                  }
+                }
+                else{ // frees extractedURL if its not internal
+                  free(extractedURL);
+                }
+              }
+              // copies extractedURL so it can still free after extractedURL becomes NULL
+              // free(extractedURL); 
+            }
+          }
         }
         else{
           printf("save failed\n");
@@ -88,51 +123,19 @@ main(const int argc, const char * args[])
       else{
         printf("Fetch failed\n");
       }
-    }
-
-    bag_delete(toCrawl, webpage_delete);
-    hashtable_delete(hash, webpage_delete);
+    // didnt use webpage delete because it gave an invalid free because of the char portion
     webpage_delete(page);
-
+    }
+    
+    // Deletes the structures once the job is complete
+    bag_delete(toCrawl, webpage_delete);
+    hashtable_delete(hash, NULL);
+    
     return 0;
   }
 }
 
 /**************** Functions *****************/
-bool
-pagefetcher(webpage_t *page)
-{
-  return webpage_fetch(page);
-}
-
-bool
-pagesaver(webpage_t *page, const char *dir, int *id, int *pos)
-{ 
-  if(dir == NULL){
-    return false;
-  }
-
-  FILE *fp;
-  int len = strlen(dir);
-  char name[len*2];
-  sprintf(name, "%s/%d", dir, *id);
-
-  // incements id counter
-  id += 1;
-
-  fp = fopen(name, "w");
-  
-  if (fp != NULL){
-    fprintf(fp, "%s\n%d\n%s", webpage_getNextURL(page, pos), webpage_getDepth(page), webpage_getHTML(page));
-    fclose(fp);
-    return true;
-  }
-  else{
-    return false;
-  }
-  
-}
-
 
 bool 
 str2int(int *number, const char string[])
@@ -141,22 +144,12 @@ str2int(int *number, const char string[])
   return(sscanf(string, "%d%c", number, &next) == 1);
 }
 
-
-/**************** TEST Functions*************/
-
-// void 
-// testprint(FILE *fp, void *item)
-// {
-//   webpage_t *i = item;
-//   char *url = webpage_getURL(i);
-//   fprintf(fp, "%s", url);
-// }
-// void 
-// testprint2(FILE *fp, const char *key, void *item)
-// {
-//   fprintf(fp, "%s", key);
-// }
-
-
-
-
+// Props to https://stackoverflow.com/questions/252782/strdup-what-does-it-do-in-c
+char *
+strdup(char *string)
+{
+  char *new = malloc(strlen(string) + 1);
+  if (new == NULL) return NULL;
+  strcpy(new, string);
+  return new;
+}
