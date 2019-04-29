@@ -27,7 +27,7 @@ bool validDir(const char *dirname);
 bool pagefetcher(webpage_t *page);
 
 /*
- * Saves the page into the given directory using an id
+ * Saves the page into the given directory using an id.
  * 
  * Saves the page into the given test directory if it exists
  * Assigns each file a name based on the "id" number

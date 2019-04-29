@@ -49,7 +49,7 @@ pagesaver(webpage_t *page, const char *dir, int *id)
   char name[len*2];
   sprintf(name, "%s/%d", dir, *id);
 
-  // incements id counter
+  // incements id counter.
   *id += 1;
 
   fp = fopen(name, "w");
