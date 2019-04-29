@@ -18,7 +18,7 @@ CFLAGS = -Wall -pedantic -std=c11 -ggdb $(FLAGS)
 CC = gcc
 MAKE = make
 
-# Build the library by archiving object files
+# Build the library by archiving object files#
 $(LIB):
 	cp libcs50-given.a $(LIB)	
 

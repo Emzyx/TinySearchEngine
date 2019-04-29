@@ -5,7 +5,7 @@
 MAKE = make
 .PHONY: all valgrind clean
 
-############## default: make all libs and programs ##########
+############## default: make all libs and programs ###########
 all: 
 	$(MAKE) -C libcs50
 	$(MAKE) -C common

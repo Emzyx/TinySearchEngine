@@ -1,4 +1,4 @@
-# Carlos Yepes
+# Carlos D Yepes
 ## CS50 Spring 2019, Tiny Search Engine
 
 GitHub username: Emzyx
