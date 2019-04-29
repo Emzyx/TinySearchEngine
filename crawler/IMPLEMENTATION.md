@@ -4,17 +4,18 @@
 ### Usage
 **./crawler [seedURL][pageDirectory][maxDepth]**
 
-To test the the files using the Makefile, you can simply try _make test_
+To test the the files using the Makefile, you can simply try _make test_, which calls regular _make_ to compile and _make ctest_ from the `common` `Makefile` to create directories for the tests, then call _make test#_ on every available test *#* being the number of test.
 or to add the results to a file, _make test &> testing.out_
 If you want to use each test case individually just use _make test#_ where "#" is the number of test you'd like to run.
 
 #### About the Makefile
 The Makefile has several rules/components laid out:
-* `direct` calls a `Makefile` rule in the `common` directory which creates a **tsetest** directory in the main **tse** and several subdirectories under **tsetest** to store the files created by the test cases
+* `direct` calls a `Makefile` rule in the `common` directory which checks if the test directories existed and creates a **tsetest** directory in the main **tse** and several subdirectories under **tsetest** to store the files created by the test cases if it didnt, and deletes them and then recreates them if they did exist.
 * `test` runs the testing script `testing.sh` which runs a majority of these rules
 * `test1` is the first test which crawls _http://old-www.cs.dartmouth.edu/~cs50/index.html_ at a depth of **1**
 * `test2` is the second test which crawls _http://old-www.cs.dartmouth.edu/~cs50/data/tse/letters/index.html_ at a depth of 3
-* `test3` is the third test which crawls _http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html_ at a depth of 2, and took me 30 mins to finish
+* `test3` is the third test which crawls _http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html_ at a depth of 1, and took me 30 mins to finish
+* `test4` is the fourth test which crawls _http://old-www.cs.dartmouth.edu/~cs50/data/tse/toscrape/index.html_ at a depth of 1
 * `clean` clears the main compiling files in the `common`, `libcs50`, and `crawler` by calling `Makefile` rules in the `common` and `libcs50` directories. The files deleted include`libcs50.a`, `crawler.o`, `crawler` and `pagedir.o`. It also calls a `Makefile` rule in the `common` and directory which deletes all of the test folders (_tsetest_ and the rest)
 
 ### Modules Used

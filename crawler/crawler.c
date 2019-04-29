@@ -84,49 +84,51 @@ main(const int argc, const char * args[])
     // The big boi loop that does the work
     while((page = bag_extract(toCrawl)) != NULL){
       int pos = 0;
-      printf("\tTook:\t%s\n", webpage_getURL(page));
+      
       // fetches the html
       if(pagefetcher(page)){
 
         // saves the page if it successfully retrieved html
         if (pagesaver(page, dir, &id)){
-          printf("\tSaved:\t%s\n", webpage_getURL(page));
+          printf("%d\tSaved:\t%s\n",webpage_getDepth(page), webpage_getURL(page));
 
           // if it isnt balls deep itll go deeper
           if (webpage_getDepth(page) < depth){
 
             // begins the extraction of URL's and adding them to the hashtable and bags
             while((extractedURL = pagescanner(page, &pos)) != NULL){
-              printf("\tFound:\t%s\n", extractedURL);
+              printf("%d\tFound:\t%s\n",webpage_getDepth(page) + 1, extractedURL);
 
               if(NormalizeURL(extractedURL)){
                 if (IsInternalURL(extractedURL)){ // normalizes the url and proceeds only if its internal
                   if (hashtable_insert(hash, extractedURL, "")){
                     webpage_t *new =  webpage_new(extractedURL, webpage_getDepth(page) + 1, NULL);
                     bag_insert(toCrawl, new);
-                    printf("\tAdded:\t%s\n", extractedURL);
+                    printf("%d\tAdded:\t%s\n",webpage_getDepth(page) + 1, extractedURL);
+                  }
+                  else{ //frees memory allocated to already existing url
+                    printf("%d\tIgDup:\t%s\n", webpage_getDepth(page) + 1, extractedURL);
+                    free(extractedURL);
                   }
                 }
                 else{ // frees extractedURL if its not internal
+                  printf("%d\tIgExt:\t%s\n", webpage_getDepth(page) + 1, extractedURL);
                   free(extractedURL);
                 }
               }
-              // copies extractedURL so it can still free after extractedURL becomes NULL
-              // free(extractedURL); 
             }
           }
         }
         else{
-          printf("save failed\n");
+          fprintf(stderr, "Save failed\n");
         }
       }
       else{
-        printf("Fetch failed\n");
+        fprintf(stderr, "Fetch failed\n");
       }
     // didnt use webpage delete because it gave an invalid free because of the char portion
     webpage_delete(page);
     }
-    
     // Deletes the structures once the job is complete
     bag_delete(toCrawl, webpage_delete);
     hashtable_delete(hash, NULL);
@@ -136,7 +138,7 @@ main(const int argc, const char * args[])
 }
 
 /**************** Functions *****************/
-
+// Thanks Prof. Kotz
 bool 
 str2int(int *number, const char string[])
 {

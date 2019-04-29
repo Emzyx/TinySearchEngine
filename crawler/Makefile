@@ -5,7 +5,7 @@
 
 # program and object files
 PROG = crawler
-OBJS = crawler.o ../common/pagedir.o ../libcs50/libcs50.a 
+OBJS = crawler.o ../common/common.a ../libcs50/libcs50.a 
 LIBS =
 
 #Uncomment to valgrind each of the tests.
@@ -23,12 +23,14 @@ crawler.o: crawler.c ../common/pagedir.h ../libcs50/libcs50.a
 pagedir.o: ../common/pagedir.h ../libcs50/libcs50.a
 ../libcs50/libcs50.a: ../libcs50/libcs50-given.a
 	cp ../libcs50/libcs50-given.a ../libcs50/libcs50.a
+../common/common.a: ../common/pagedir.o
+	ar cr $@ $^
 
-.PHONY: test clean direct
+.PHONY: direct test test1 test2 test3 clean
 
-# some tests and cleanage
+# checks if directory exists, if it did recursively clear their contents by deleting them and making them
 direct:
-	$(MAKE) ctest -C ../common
+	if [ -d "../tsetest" ]; then $(MAKE) dtest -C ../common; fi; $(MAKE) ctest -C ../common
 
 # the real big test, can run without having called anything beforehand
 test:
@@ -41,7 +43,10 @@ test2:
 	$(VAL) ./$(PROG) http://old-www.cs.dartmouth.edu/~cs50/data/tse/letters/index.html ../tsetest/letters3 3
     
 test3:
-	$(VAL) ./$(PROG) http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html ../tsetest/wiki2 2
+	$(VAL) ./$(PROG) http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html ../tsetest/wiki1 1
+
+test4:
+	$(VAL) ./$(PROG) http://old-www.cs.dartmouth.edu/~cs50/data/tse/toscrape/index.html ../tsetest/scrape1 1
 
 clean:
 	rm -f *~ *.o

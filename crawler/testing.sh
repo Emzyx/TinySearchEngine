@@ -3,10 +3,8 @@
 # TEST SCRIPT FOR CRAWLER
 # RESULTS WILL BE IN /tse-Emzyx/tsetest
 
-# Compiles the files
+# Compiles the files and makes the directories
 make
-
-# makes the directories for the tests
 make direct
 
 # runs test1
@@ -18,5 +16,9 @@ make test1
 make test2
 
 # test3
-# uses http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html with a depth of 2
+# uses http://old-www.cs.dartmouth.edu/~cs50/data/tse/wikipedia/index.html with a depth of 1
 make test3
+
+# test4
+# uses http://old-www.cs.dartmouth.edu/~cs50/data/tse/toscrape/index.html with a depth of 1
+make test4
