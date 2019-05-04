@@ -45,4 +45,14 @@ bool pagesaver(webpage_t *page, const char *dir, int *id);
  */
 char * pagescanner(webpage_t *page, int *pos);
 
+/*
+ *
+ * 
+ */
+bool validWriteFile(const char * name);
+
+/**************** Functions *****************/
+// Thanks Prof. Kotz
+bool str2int(int *number, const char string[]);
+
 #endif

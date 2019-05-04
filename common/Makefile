@@ -6,6 +6,17 @@
 PROG = pagedir
 MAKE = make
 
+CFLAGS = -Wall -pedantic -std=c11 -ggdb $(LINKS)
+LINKS = -I../libcs50
+
+pagedir.o: pagedir.h libcs50.a
+word.o: word.h
+index.o: index.h
+libcs50.a:
+	$(MAKE) -C ../libcs50
+common.a: pagedir.o word.o index.o
+	ar cr $@ $^
+
 .PHONY: dtest ctest clean
 
 # creates several directories which will hold the test results

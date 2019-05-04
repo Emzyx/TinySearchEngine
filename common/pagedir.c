@@ -25,7 +25,7 @@ validDir(const char *dirname)
       return true;
   }
   else{
-      fprintf(stderr, "directory doesnt appear to be accessible\n");
+      fprintf(stderr, "Directory doesnt appear to be accessible\n");
       return false;
   }
 }
@@ -70,3 +70,28 @@ pagescanner(webpage_t *page, int *pos)
   return webpage_getNextURL(page, pos);
 }
 
+bool
+validWriteFile(const char * name){
+  if (name == NULL){
+    fprintf(stderr, "Not a valid filename\n");
+    return false;
+  }
+
+  FILE *fp;
+  if ((fp = fopen(name, "w")) != NULL){
+      fclose(fp);
+      return true;
+  }
+  else{
+    fprintf(stderr, "Not a writable file\n");
+    return false;
+  }
+  
+}
+
+bool 
+str2int(int *number, const char string[])
+{
+  char next;
+  return(sscanf(string, "%d%c", number, &next) == 1);
+}
