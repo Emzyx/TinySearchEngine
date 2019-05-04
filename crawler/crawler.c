@@ -18,7 +18,6 @@
 #define SLOTS 100
 
 // Declarations
-bool str2int(int *number, const char string[]);
 char * strdup(char *string);
 
 int 
@@ -135,15 +134,6 @@ main(const int argc, const char * args[])
     
     return 0;
   }
-}
-
-/**************** Functions *****************/
-// Thanks Prof. Kotz
-bool 
-str2int(int *number, const char string[])
-{
-  char next;
-  return(sscanf(string, "%d%c", number, &next) == 1);
 }
 
 // Props to https://stackoverflow.com/questions/252782/strdup-what-does-it-do-in-c

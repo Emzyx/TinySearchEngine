@@ -19,12 +19,11 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
 # Dependencies
-crawler.o: crawler.c ../common/pagedir.h ../libcs50/libcs50.a
-pagedir.o: ../common/pagedir.h ../libcs50/libcs50.a
-../libcs50/libcs50.a: ../libcs50/libcs50-given.a
-	cp ../libcs50/libcs50-given.a ../libcs50/libcs50.a
-../common/common.a: ../common/pagedir.o
-	ar cr $@ $^
+crawler.o: crawler.c common.a libcs50.a
+libcs50.a:
+	$(MAKE) -C ../libcs50
+common.a:
+	$(MAKE) common.a -C ../common
 
 .PHONY: direct test test1 test2 test3 clean
 
