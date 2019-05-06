@@ -4,6 +4,8 @@
  * Carlos Yepes, April 2019
  */
 
+// GRADER you need to decompose your code into different funtions 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
