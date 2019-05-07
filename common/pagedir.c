@@ -1,11 +1,9 @@
 
 
-#include <stdbool.h>
 #include "pagedir.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "webpage.h"
 
 bool
 validDir(const char *dirname)

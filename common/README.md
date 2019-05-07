@@ -2,6 +2,7 @@
 ## CS50 Spring 2019
 
 All of these files are used through the `/crawler/Makefile` which uses the `Makefile` within `common`.
+The `indexer` utilizes the `common.a` archive
 
 The pagedir contains several functions which are described within pagedir.h
 

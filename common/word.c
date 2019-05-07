@@ -1,13 +1,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
 #include "word.h"
 
-
-bool validWord(char * word)
+bool 
+validWord(char * word)
 {
   // normalizes the word
   // Credit to: https://stackoverflow.com/questions/2661766/how-do-i-lowercase-a-string-in-c
@@ -23,11 +22,4 @@ bool validWord(char * word)
     return false;
   }
 }
-
-
-
-
-
-
-
 

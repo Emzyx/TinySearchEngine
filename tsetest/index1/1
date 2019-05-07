@@ -1,0 +1,14 @@
+http://old-www.cs.dartmouth.edu/~cs50/index.html
+0
+<!DOCTYPE HTML PUBLIC "-//Netscape Comm. Corp.//DTD HTML//EN">
+<html> <head>
+<title>Welcome to CS50</title>
+</head>
+
+<body>
+<h1>Computer Science 50 demonstration page</h1>
+
+This is the "home page" for user <tt>cs50</tt> on the CS-department servers.
+It is not the same as the <a href="https://www.cs.dartmouth.edu/~cs50/">course website</a> because that actually runs on a different server, and requires an encrypted connection.
+
+</body> </html>

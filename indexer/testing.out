@@ -1,0 +1,159 @@
+bash -v testing.sh
+#!/bin/bash
+
+# Test script for Indexer
+# Results will be in testing.out
+# There will also be files produced
+
+# Calls rules within the crawler Makefile to compile crawler and create files for testing
+#if [ -d ../tsetest ]
+#then
+#    echo "crawl directory exists, so files probably do too"
+#else
+#    make crawl
+#fi
+### Did not use code above since a call to Makefile probably isn't allowed, but I'll keep it since it may be useful to me later.
+
+# Compiles indexer and indextest within the indexer directory
+make
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+make common.a -C ../common
+make[2]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/common'
+make -C ../libcs50
+make[3]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/libcs50'
+cp libcs50-given.a libcs50.a	
+make[3]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/libcs50'
+cc -Wall -pedantic -std=c11 -ggdb -I../libcs50   -c -o pagedir.o pagedir.c
+cc -Wall -pedantic -std=c11 -ggdb -I../libcs50   -c -o word.o word.c
+cc -Wall -pedantic -std=c11 -ggdb -I../libcs50   -c -o index.o index.c
+ar cr common.a pagedir.o word.o index.o
+make[2]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/common'
+make -C ../libcs50
+make[2]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/libcs50'
+make[2]: `libcs50.a' is up to date.
+make[2]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/libcs50'
+gcc -Wall -pedantic -std=c11 -ggdb -I../libcs50 -I../common   -c -o indexer.o indexer.c
+gcc -Wall -pedantic -std=c11 -ggdb -I../libcs50 -I../common indexer.o ../common/common.a ../libcs50/libcs50.a  -o indexer
+gcc -Wall -pedantic -std=c11 -ggdb -I../libcs50 -I../common   -c -o indextest.o indextest.c
+gcc -Wall -pedantic -std=c11 -ggdb -I../libcs50 -I../common indextest.o ../common/common.a ../libcs50/libcs50.a  -o indextest
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# Begin testing
+
+# insufficient arguments
+make insufficient
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+./indexer  ../tsetest/index1
+Usage: ./indexer [pageDirectory][indexFilename]
+make[1]: *** [insufficient] Error 1
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# invalid directory
+make invalid
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+./indexer  ../tsefake/letters3 fake_letters.Index
+Directory doesnt appear to be accessible
+make[1]: *** [invalid] Error 1
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# tries unwriteable file
+make nwrite
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+touch nwrite.Index
+chmod a-rwx nwrite.Index
+ls -l nwrite.Index
+-r-xr-xr-x 1 vagrant vagrant 0 May  7 02:23 nwrite.Index
+./indexer  ../tsetest/index1 nwrite.Index
+Not a writable file
+make[1]: *** [nwrite] Error 1
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# removes unwriteable file so it wont clutter
+chmod +w nwrite.Index
+rm -f nwrite.Index
+
+# tests letters
+make testL
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+valgrind ./indexer  ../tsetest/letters3 letters.Index
+==30221== Memcheck, a memory error detector
+==30221== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==30221== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==30221== Command: ./indexer ../tsetest/letters3 letters.Index
+==30221== 
+==30221== 
+==30221== HEAP SUMMARY:
+==30221==     in use at exit: 0 bytes in 0 blocks
+==30221==   total heap usage: 1,572 allocs, 1,572 frees, 89,712 bytes allocated
+==30221== 
+==30221== All heap blocks were freed -- no leaks are possible
+==30221== 
+==30221== For counts of detected and suppressed errors, rerun with: -v
+==30221== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# tests wiki
+make testW
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+valgrind ./indexer  ../tsetest/wiki1 wiki.Index
+==30237== Memcheck, a memory error detector
+==30237== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==30237== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==30237== Command: ./indexer ../tsetest/wiki1 wiki.Index
+==30237== 
+==30237== 
+==30237== HEAP SUMMARY:
+==30237==     in use at exit: 0 bytes in 0 blocks
+==30237==   total heap usage: 1,572,306 allocs, 1,572,306 frees, 234,199,271,878 bytes allocated
+==30237== 
+==30237== All heap blocks were freed -- no leaks are possible
+==30237== 
+==30237== For counts of detected and suppressed errors, rerun with: -v
+==30237== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# tests scrape
+make testS
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+valgrind ./indexer  ../tsetest/scrape1 scrape.Index
+==31265== Memcheck, a memory error detector
+==31265== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==31265== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==31265== Command: ./indexer ../tsetest/scrape1 scrape.Index
+==31265== 
+==31265== 
+==31265== HEAP SUMMARY:
+==31265==     in use at exit: 0 bytes in 0 blocks
+==31265==   total heap usage: 2,336,644 allocs, 2,336,644 frees, 42,741,340,056 bytes allocated
+==31265== 
+==31265== All heap blocks were freed -- no leaks are possible
+==31265== 
+==31265== For counts of detected and suppressed errors, rerun with: -v
+==31265== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# tests the indextest which tests index_save and index_load
+make testT
+make[1]: Entering directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+./indextest scrape.Index new_scrape.Index
+make[1]: Leaving directory `/home/vagrant/cs50-dev/tse-Emzyx/indexer'
+
+# will sort to find differences in files
+gawk -f indexsort.awk scrape.Index > sorted_scrape.Index
+gawk -f indexsort.awk new_scrape.Index > sorted_new_scrape.Index
+
+DIFF=$(diff --brief sorted_scrape.Index sorted_new_scrape.Index)
+diff --brief sorted_scrape.Index sorted_new_scrape.Index
+if [ "$DIFF" != "" ] 
+then
+    echo "Files differed."
+else
+    echo "Files matched."
+fi
+Files matched.
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-
+// header for word.c
 
 
 #ifndef _WORDS_H

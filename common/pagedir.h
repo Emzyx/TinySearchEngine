@@ -5,16 +5,6 @@
 #include <stdbool.h>
 #include "webpage.h"
 
-/*
- * Checks the validity of a given directory name
- * 
- * It attempts to open a file to write using the
- * given directory name.
- * 
- * Returns false if it could not be opened, since directory didn't exist
- * Returns true and creates a .crawler file in directory.
- */
-bool validDir(const char *dirname);
 
 /*
  * Retrieves the html from the url of a given webpage struct 
@@ -46,13 +36,33 @@ bool pagesaver(webpage_t *page, const char *dir, int *id);
 char * pagescanner(webpage_t *page, int *pos);
 
 /*
- *
+ * Checks the validity of a given directory name
+ * 
+ * It attempts to open a file to write using the
+ * given directory name.
+ * 
+ * Returns false if it could not be opened, since directory didn't exist
+ * Returns true and creates a .crawler file in directory.
+ */
+bool validDir(const char *dirname);
+
+/*
+ *  Checks to see if the write file is valid by attempting to it.
+ * 
+ * Returns false if it failed to open the file
+ * Returns true if it successfully opened the file for writing
  * 
  */
 bool validWriteFile(const char * name);
 
-/**************** Functions *****************/
-// Thanks Prof. Kotz
+/* 
+ * Given a pointer to an integer, converts a valid char string into an integer
+ * 
+ * Returns true if valid int
+ * Returns false if failed
+ * 
+ * Thanks Prof. Kotz
+ */
 bool str2int(int *number, const char string[]);
 
 #endif

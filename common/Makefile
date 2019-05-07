@@ -1,5 +1,5 @@
 # Makefile for pagedir
-# Initializes directories in which the tests will be stored
+# Initializes directories in which the tests will be stored.
 #
 # Carlos Yepes, April 2019
 
