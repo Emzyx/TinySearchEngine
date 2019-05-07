@@ -18,19 +18,6 @@ make
 
 # Begin testing
 
-# insufficient arguments
-make insufficient
-
-# invalid directory
-make invalid
-
-# tries unwriteable file
-make nwrite
-
-# removes unwriteable file so it wont clutter
-chmod +w nwrite.Index
-rm -f nwrite.Index
-
 # tests letters
 make testL
 
@@ -42,6 +29,28 @@ make testS
 
 # tests the indextest which tests index_save and index_load
 make testT
+
+# insufficient arguments on indexer
+make insufficient
+
+# insufficient arguments on indextest
+make insufftest
+
+# invalid directory on indexer
+make invalid
+
+# tries to read non existent file on indextest
+make nread
+
+# ceates and tries unwriteable file on indexer
+make nwrite
+
+# tries unwritable file on indextest
+make nwritetest
+
+# removes unwriteable file so it wont clutter
+chmod +w nwrite.Index
+rm -f nwrite.Index
 
 # will sort to find differences in files
 gawk -f indexsort.awk scrape.Index > sorted_scrape.Index

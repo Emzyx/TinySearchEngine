@@ -13,16 +13,21 @@ The `Makefile` will house most if not all of the tests which will be called in t
 
 To test we will provide a *make* rule that will crawl and create webpages for the use of the tests. It will create a directory and perform the crawl. They should all be deleted within the **crawler** `Makefile`, which we will probably include in the **indexer** `Makefile`
 
+#### Testing in the Makefile
+
 The tests are:
  - `test` the main test which will call most to all of the others by running the test script: `testing.sh`
  - `insufficient` to test the program with insufficient arguments
+ - `insufftest` which tests indextest with insufficient arguments
  - `invalid` which tests a non-existing directory
  - `nwrite` which creates a file, and makes it unwriteable (nwrite = not writeable)
+ - `nwritetest` which tests the same unwriteable file on the *indextest*
+ - `nread` which tries to open a nonexisting file for reading
  - `testL` which will test the files created by **crawler** when it crawled "letters" at a depth of 3
  - `testW` which will test the files created by **crawler** when it crawled wiki at a depth of 1
  - `testT` which uses the `indextest` to test the *index_load* and the *index_save* using the index of letters
 
- It also includes a nifty clean, which cleans the common directory, the libcs50 directory and the indexer directory from the *.o*'s and binary files.
+ It also includes a nifty *clean*, which cleans the common directory, the libcs50 directory and the indexer directory from the *.o*'s and binary files.
 
  If you want utter and complete extermination use *make cleanall* which cleans the indexer, common, and libcs50 file of all *.o* files, binary files and test results aside from *testing.out*
 

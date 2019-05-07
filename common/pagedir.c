@@ -87,6 +87,25 @@ validWriteFile(const char * name){
   
 }
 
+bool
+validReadFile(const char * name){
+  if(name == NULL){
+    fprintf(stderr, "Not a valid filename\n");
+    return false;
+  }
+
+  FILE *fp;
+  if ((fp = fopen(name, "r")) != NULL){
+    fclose(fp);
+    return true;
+  }
+  else{
+    fprintf(stderr, "Not a readable file\n");
+    return false;
+  }
+}
+
+
 bool 
 str2int(int *number, const char string[])
 {

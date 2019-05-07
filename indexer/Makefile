@@ -13,7 +13,7 @@ PROGTEST = indextest
 OBJSTEST = indextest.o ../common/common.a ../libcs50/libcs50.a
 
 # uncomment for valgrind testing
-VAL = #valgrind
+VAL = valgrind
 
 CC = gcc
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(LINKS)
@@ -39,29 +39,13 @@ libcs50.a:
 common.a:
 	$(MAKE) common.a -C ../common
 
-.PHONY: clean cleanall crawl test testL testT testW testS insufficient invalid nwrite
+.PHONY: clean cleanall crawl test testL testT testW testS insufficient insufftest invalid nwrite nwritetest nread
 
 ################TESTS#############
 
 # master test, runs the script
 test:
 	bash -v testing.sh
-
-# insufficient arguments
-insufficient:
-	./$(PROG) ../tsetest/index1
-
-# invalid directory
-invalid:
-	./$(PROG) ../tsefake/letters3 fake_letters.Index
-
-# removes the writeability of a file then feeds it to indexer, should fail
-# testing script will remove the file to not clutter AFTER it fails
-nwrite:
-	touch nwrite.Index
-	chmod a-rwx nwrite.Index
-	ls -l nwrite.Index
-	./$(PROG) ../tsetest/index1 nwrite.Index
 
 # tests the letters
 testL:
@@ -75,8 +59,37 @@ testW:
 testS:
 	$(VAL) ./$(PROG) ../tsetest/scrape1 scrape.Index
 
+# tests test (indextest)
 testT:
 	$(VAL) ./$(PROGTEST) scrape.Index new_scrape.Index
+
+# insufficient arguments
+insufficient:
+	./$(PROG) ../tsetest/index1
+
+#insufficient aruments on indextest
+insufftest:
+	./$(PROGTEST) scrape.Index
+
+# invalid directory
+invalid:
+	./$(PROG) ../tsefake/letters3 fake_letters.Index
+
+# tests non existent read file for indextest
+nread:
+	./$(PROGTEST) non_existent nread.Index
+
+# removes the writeability of a file then feeds it to indexer, should fail
+# testing script will remove the file to not clutter AFTER it fails
+nwrite:
+	touch nwrite.Index
+	chmod a-rwx nwrite.Index
+	ls -l nwrite.Index
+	./$(PROG) ../tsetest/index1 nwrite.Index
+
+# same as nwrite, but on the indextest
+nwritetest:
+	./$(PROGTEST) scrape.Index nwrite.Index
 
 ################### END OF TESTS #######################
 

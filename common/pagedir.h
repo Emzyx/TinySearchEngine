@@ -47,13 +47,21 @@ char * pagescanner(webpage_t *page, int *pos);
 bool validDir(const char *dirname);
 
 /*
- *  Checks to see if the write file is valid by attempting to it.
+ *  Checks to see if the write file is valid by attempting to open it.
  * 
  * Returns false if it failed to open the file
  * Returns true if it successfully opened the file for writing
  * 
  */
 bool validWriteFile(const char * name);
+
+/*
+ * Checks to see if the read file is valid by attempting to open it.
+ * 
+ * Returns false if name was invalid or failed to open for reading
+ * Returns true if it successfuly opened for reading
+ */
+bool validReadFile(const char * name);
 
 /* 
  * Given a pointer to an integer, converts a valid char string into an integer
