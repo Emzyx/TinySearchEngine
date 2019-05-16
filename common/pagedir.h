@@ -63,6 +63,13 @@ bool validWriteFile(const char * name);
  */
 bool validReadFile(const char * name);
 
+/*
+ * Checks to see if its a valid crawler directory
+ * Would have added to pagedir, but as of now its only being used once within querier.
+ * Literally switches the "w" in fopen to "r"
+ */
+bool validCrawlDir(const char *dirname);
+
 /* 
  * Given a pointer to an integer, converts a valid char string into an integer
  * 

@@ -19,13 +19,14 @@ $(PROG): $(OBJS)
 	$(CC) $(CFLAGS) $^ $(LIBS) -o $@
 
 # Dependencies
+# updated to a cleaner look than I had before
 crawler.o: crawler.c common.a libcs50.a
 libcs50.a:
 	$(MAKE) -C ../libcs50
 common.a:
 	$(MAKE) common.a -C ../common
 
-.PHONY: direct test test1 test2 test3 clean
+.PHONY: direct test test1 test2 test3 clean cleanall
 
 # checks if directory exists, if it did recursively clear their contents by deleting them and making them
 direct:
@@ -47,7 +48,15 @@ test3:
 test4:
 	$(VAL) ./$(PROG) http://old-www.cs.dartmouth.edu/~cs50/data/tse/toscrape/index.html ../tsetest/scrape1 1
 
+# changed it so it wasnt as useless to me as it was before
 clean:
+	rm -f *~ *.o
+	rm -f $(PROG)
+	$(MAKE) clean -C ../libcs50
+	$(MAKE) clean -C ../common
+
+# this was my previous clean which deleted the files, and that isnt too fun sometimes
+cleanall:
 	rm -f *~ *.o
 	rm -f $(PROG)
 	$(MAKE) clean -C ../libcs50

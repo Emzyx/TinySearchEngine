@@ -10,6 +10,6 @@
  * Checks the length of the word to see if its less than three
  * Normalizes the word as well
  */
-bool validWord(char * word);
+bool isValidWord(char * word);
 
 #endif

@@ -13,7 +13,7 @@ PROGTEST = indextest
 OBJSTEST = indextest.o ../common/common.a ../libcs50/libcs50.a
 
 # uncomment for valgrind testing
-VAL = valgrind
+VAL = #valgrind
 
 CC = gcc
 CFLAGS = -Wall -pedantic -std=c11 -ggdb $(LINKS)

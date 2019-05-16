@@ -6,7 +6,7 @@
 #include "word.h"
 
 bool 
-validWord(char * word)
+isValidWord(char * word)
 {
   // normalizes the word
   // Credit to: https://stackoverflow.com/questions/2661766/how-do-i-lowercase-a-string-in-c

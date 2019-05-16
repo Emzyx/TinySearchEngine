@@ -22,7 +22,7 @@ index_build(const char * directory, hashtable_t *index)
     page = remakeWebpage(fp);
     int pos = 0;
     while ((word = webpage_getNextWord(page, &pos)) != NULL){
-      if (validWord(word)){ // validates individual word
+      if (isValidWord(word)){ // validates individual word
 
         if ((ctrs = hashtable_find(index, word)) == NULL){ // makes a counter for the word if it didn't have one
           ctrs = counters_new();

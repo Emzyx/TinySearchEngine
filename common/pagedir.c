@@ -105,6 +105,28 @@ validReadFile(const char * name){
   }
 }
 
+bool
+validCrawlDir(const char *dirname)
+{ 
+  if (dirname == NULL){
+      fprintf(stderr, "Null or empty directory name\n");
+      return false;
+  }
+
+  FILE *fp;
+  int len = strlen(dirname);
+  char filename[len*2];
+    
+  sprintf(filename, "%s/.crawler", dirname);
+  if((fp = fopen(filename, "r")) != NULL){
+      fclose(fp);
+      return true;
+  }
+  else{
+      fprintf(stderr, "Directory doesnt appear to be crawler written\n");
+      return false;
+  }
+}
 
 bool 
 str2int(int *number, const char string[])

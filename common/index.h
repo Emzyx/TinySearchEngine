@@ -34,7 +34,7 @@ webpage_t *
 remakeWebpage(FILE *fp);
 
 /*
- * A delete function to delete the counter items
+ * A delete function to delete the counter items called by hashtable_delete
  */
 void hashCountersDelete(void *item);
 
